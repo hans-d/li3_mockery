@@ -131,6 +131,10 @@ class Mockery extends \lithium\core\StaticObject {
 		return \Mockery::fetchMock($alias);
 	}
 
+        public static function fetchMockClass($name) {
+                return self::$_lookup[$name];
+        }
+
 	public static function resetContainer() {
                 \Mockery::resetContainer();
                 self::$_lookup = array();
