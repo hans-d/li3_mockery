@@ -11,11 +11,6 @@ require_once MOCKERY_LIBS . '/mockery/library/Mockery.php';
 class Mockery extends \lithium\core\StaticObject {
 
 	/**
-	 * Containers for the generated mocks.
-	 */
-	protected static $_container = array();
-
-	/**
 	 * Holds the class names for the generated mocks.
 	 *
 	 * @var unknown_type
@@ -71,7 +66,6 @@ class Mockery extends \lithium\core\StaticObject {
 	 */
 	protected static function _mock($class, array $options = array()) {
 		$options += array(
-				'container' => 'default',
 				'unique' => 'true',
 				'type' => 'mock',
 				'subtype' => false,
@@ -79,14 +73,9 @@ class Mockery extends \lithium\core\StaticObject {
 		);
 		extract($options);
 
-		if (!isset(self::$_container[$container])) {
-			self::$_container[$container] = new \Mockery\Container;
-			self::$_lookup[$container] = array();
-		}
-
 		$newName = ($namespace ? $type . '\\' : '') . $class . ($unique ? uniqid() : '');
-		$mock = self::$_container[$container]->$type(($subtype ? $subtype . ':' : '') . $newName);
-		self::$_lookup[$container][$class] = $newName;
+		$mock = \Mockery::$type(($subtype ? $subtype . ':' : '') . $newName);
+		self::$_lookup[$class] = $newName;
 
 		return $mock;
 	}
@@ -121,7 +110,7 @@ class Mockery extends \lithium\core\StaticObject {
 	 * @param string $name the mock reference name
 	 * @return object the generated mock
 	 */
-	public static function overloadMock($name) {
+	public static function overloadMock($name, array $options=array()) {
 		return self::mock($name, array('subtype' => 'overload') + $options);
 	}
 
@@ -131,37 +120,20 @@ class Mockery extends \lithium\core\StaticObject {
 	 *
 	 * @return void
 	 */
-	public static function close($container='default')
+	public static function close()
 	{
-		if (!isset(self::$_container[$container])) {
-			return;
-		}
-		self::$_container[$container]->mockery_teardown();
-		self::$_container[$container]->mockery_close();
-		self::resetContainer($container);
+                \Mockery::close();
+                self::$_lookup = array();
 	}
 
-	public static function fetchMock($name, $container='default') {
-		if (!isset(self::$_container[$container])) {
-			return null;
-		}
-		$name = self::$_lookup[$container][$name];
-		return self::$_container[$container]->fetchMock($name);
+	public static function fetchMock($name) {
+		$alias = self::$_lookup[$name];
+		return \Mockery::fetchMock($alias);
 	}
 
-	public static function getContainer($container='default') {
-		return self::$_container[$container];
+	public static function resetContainer() {
+                \Mockery::resetContainer();
+                self::$_lookup = array();
 	}
-
-	public static function setContainer() {
-		throw \Exception('not supported');
-	}
-
-	public static function resetContainer($container='default'){
-		unset (self::$_container[$container]);
-		unset (self::$_lookup[$container]);
-	}
-
-
 
 }
