@@ -9,14 +9,13 @@ use li3_mockery\test\Mockery as m;
  * Run the sample as found on https://github.com/padraic/mockery
  *
  */
-class MockeryTest extends \lithium\test\Unit {
+class MockeryExampleTest extends \lithium\test\Unit {
 
 	public function tearDown() {
 		m::close();
 	}
 
-	public function testGetsAverageTemperatureFromThreeServiceReadings()
-	{
+	public function testGetsAverageTemperatureFromThreeServiceReadings() {
 		$service = m::mock('service');
 		$service->shouldReceive('readTemp')->times(3)->andReturn(10, 12, 14);
 

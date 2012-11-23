@@ -2,6 +2,8 @@
 
 namespace li3_mockery\test;
 
+use lithium\core\Libraries;
+
 /**
  * Get the \Mockery class in a li3 accessible class, with some extras.
  *
@@ -11,26 +13,30 @@ class Mockery extends \lithium\core\StaticObject {
 	/**
 	 * Holds the class names for the generated mocks.
 	 *
-	 * @var unknown_type
+	 * @var array
 	 */
 	protected static $_lookup = array();
 
 	/**
 	 * Shortcut to calling methods defined in `\Mockery`
+	 *
+	 * @param  string $name      The name of the static method
+	 * @param  array  $arguments The array of arguments to pass
+	 * @return mixed
 	 */
 	public static function __callStatic($name, $arguments) {
-		return self::invokeMethodOn($name, '\Mockery', $arguments);
+		return self::invokeMethodOn($name, self::mockery(), $arguments);
 	}
 
 	/**
 	 * Variation on Lithium's `invokeMethod`, allows to set on which class to invoke the Method.
 	 *
-	 * @see invokeMethod()
-	 * @param unknown_type $method
-	 * @param unknown_type $class
-	 * @param unknown_type $params
+	 * @see   invokeMethod()
+	 * @param string $method
+	 * @param string $class
+	 * @param array $params
 	 */
-	public static function invokeMethodOn($method, $class, $params = array()) {
+	public static function invokeMethodOn($method, $class, array $params = array()) {
 		if (isset(self::$_classes) && isset(self::$_classes[$class])) {
 			$class = self::$_classes[$class];
 		}
@@ -59,15 +65,17 @@ class Mockery extends \lithium\core\StaticObject {
 	 * passed and later used in the application to create a new object
 	 * that happens to be the mock.
 	 *
-	 * @see aliasMock()
-	 * @see overloadMock()
+	 * @see    aliasMock()
+	 * @see    overloadMock()
+	 * @param  string $class
+	 * @param  array $options
 	 */
 	protected static function _mock($class, array $options = array()) {
 		$options += array(
-				'unique' => 'true',
-				'type' => 'mock',
-				'subtype' => false,
-				'namespace' => true
+			'unique' => 'true',
+			'type' => 'mock',
+			'subtype' => false,
+			'namespace' => true
 		);
 		extract($options);
 
@@ -78,10 +86,24 @@ class Mockery extends \lithium\core\StaticObject {
 		return $mock;
 	}
 
+	/**
+	 * Mock
+	 * 
+	 * @param  string $class   The name of the class
+	 * @param  array  $options The array of options
+	 * @return object          The mock
+	 */
 	public static function mock($class, array $options = array()) {
 		return self::_mock($class, array('type' => 'mock') + $options);
 	}
 
+	/**
+	 * instanceMock
+	 * 
+	 * @param  string $class   The name of the class
+	 * @param  array  $options Array of options
+	 * @return object          The mock
+	 */
 	public static function instanceMock($class, array $options = array()) {
 		return self::_mock($class, array('type' => 'instanceMock') + $options);
 	}
@@ -92,8 +114,9 @@ class Mockery extends \lithium\core\StaticObject {
 	 *
 	 * Alias mocks are needed when static methods are to be called.
 	 *
-	 * @param string $name the mock reference name
-	 * @return object the generated mock
+	 * @param  string $class   The mock reference name
+	 * @param  array  $options
+	 * @return object          The generated mock
 	 */
 	public static function aliasMock($class, array $options = array()) {
 		return self::mock($class, array('subtype' => 'alias') + $options);
@@ -105,10 +128,11 @@ class Mockery extends \lithium\core\StaticObject {
 	 * Overload mocks are needed when the object will be later instantiated.
 	 * Eg: `new mock\someClass\someMethod\someName()`
 	 *
-	 * @param string $name the mock reference name
-	 * @return object the generated mock
+	 * @param  string $name    The mock reference name
+	 * @param  array  $options
+	 * @return object          The generated mock
 	 */
-	public static function overloadMock($name, array $options=array()) {
+	public static function overloadMock($name, array $options = array()) {
 		return self::mock($name, array('subtype' => 'overload') + $options);
 	}
 
@@ -118,24 +142,39 @@ class Mockery extends \lithium\core\StaticObject {
 	 *
 	 * @return void
 	 */
-	public static function close()
-	{
-                \Mockery::close();
-                self::$_lookup = array();
+	public static function close() {
+		\Mockery::close();
+		self::$_lookup = array();
 	}
 
+	/**
+	 * Fetch mock
+	 * 
+	 * @param  string $name The name of the mock to fetch
+	 * @return object       The cached mock
+	 */
 	public static function fetchMock($name) {
 		$alias = self::$_lookup[$name];
 		return \Mockery::fetchMock($alias);
 	}
 
-        public static function fetchMockClass($name) {
-                return self::$_lookup[$name];
-        }
+	/**
+	 * Fetch mock class
+	 * @param  string $name The name of the mock to fetch
+	 * @return object       The cached mock
+	 */
+	public static function fetchMockClass($name) {
+		return self::$_lookup[$name];
+	}
 
+	/**
+	 * Reset container
+	 * 
+	 * @return void
+	 */
 	public static function resetContainer() {
-                \Mockery::resetContainer();
-                self::$_lookup = array();
+		\Mockery::resetContainer();
+		self::$_lookup = array();
 	}
 
 }

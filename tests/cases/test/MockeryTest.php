@@ -1,6 +1,6 @@
 <?php
 
-namespace app\tests\cases\test;
+namespace li3_mockery\tests\cases\test;
 
 use li3_mockery\test\Mockery as m;
 
