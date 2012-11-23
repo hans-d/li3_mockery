@@ -3,6 +3,6 @@
 use lithium\core\Libraries;
 
 Libraries::add("Mockery", array(
-	"path" => MOCKERY_LIBS . "/mockery/library/Mockery",
+	"path" => MOCKERY_LIBS . "/mockery/mockery/library/Mockery",
 	"bootstrap" => false,
 ));
