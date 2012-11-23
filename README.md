@@ -2,7 +2,7 @@
 
 The mockery framework via a lithium plugin
 
-[![Build Status](https://secure.travis-ci.org/BlaineSch/li3_mockery.png?branch=master)](http://travis-ci.org/BlaineSch/li3_mockery)
+[![Build Status](https://secure.travis-ci.org/hans-d/li3_mockery.png?branch=master)](http://travis-ci.org/hans-d/li3_mockery)
 
 ## Installation
 
@@ -11,7 +11,7 @@ The mockery framework via a lithium plugin
 {
     "require": {
         ...
-        "blainesch/li3_mockery": "dev-master"
+        "hans-d/li3_mockery": "dev-master"
         ...
     }
 }
@@ -22,12 +22,12 @@ php composer.phar install
 
 ### Submodule
 ~~~ bash
-git submodule add git://github.com/BlaineSch/li3_mockery.git libraries/li3_mockery
+git submodule add git://github.com/hans-d/li3_mockery.git libraries/li3_mockery
 ~~~
 
 ### Clone Directly
 ~~~ bash
-git clone git://github.com/BlaineSch/li3_mockery.git libraries/li3_mockery
+git clone git://github.com/hans-d/li3_mockery.git libraries/li3_mockery
 ~~~
 
 ## Usage
