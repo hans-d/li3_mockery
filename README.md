@@ -2,6 +2,8 @@
 
 The mockery framework via a lithium plugin
 
+[![Build Status](https://secure.travis-ci.org/BlaineSch/li3_mockery.png?branch=master)](http://travis-ci.org/BlaineSch/li3_mockery)
+
 ## Installation
 
 ### Composer
