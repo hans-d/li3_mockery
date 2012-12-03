@@ -1,0 +1,18 @@
+{
+	"name": "hans-d/li3_mockery",
+	"type": "lithium-library",
+	"description": "The mockery framework via a lithium plugin",
+	"keywords": ["lithium", "li3", "testing", "unit", "mockery", "mock"],
+	"homepage": "https://github.com/hans-d/li3_mockery",
+	"license": "The BSD License",
+	"authors": [
+		{
+			"name": "Hans Donner",
+			"email": "hans.donner@pobox.com",
+			"homepage": "https://github.com/hans-d"
+		}
+	],
+	"require": {
+		"mockery/mockery": ">=0.7.2"
+	}
+}
